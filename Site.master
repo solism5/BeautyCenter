@@ -1,0 +1,31 @@
+<%@ Master Language="VB" AutoEventWireup="false" CodeBehind="Site.master.vb" Inherits="BeautyCenter.Site" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%: Page.Title %> - BeautyGlowCenter</title>
+    <link href="<%: ResolveUrl("~/Content/Site.css") %>" rel="stylesheet" type="text/css" />
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
+</head>
+<body>
+    <form id="form1" runat="server">
+        <nav class="navbar">
+            <a href="<%: ResolveUrl("~/AgendarCita.aspx") %>" class="navbar-brand">Beauty Glow Center</a>
+            <div class="nav-links">
+                <a href="<%: ResolveUrl("~/AgendarCita.aspx") %>" class="nav-link">Agendar Cita</a>
+                <a href="<%: ResolveUrl("~/Clientes.aspx") %>" class="nav-link">Manejar Clientes</a>
+            </div>
+        </nav>
+
+        <div class="main-content">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+        </div>
+
+        <footer class="footer">
+            <p>&copy; <%: DateTime.Now.Year %> - BeautyGlowCenter - <a href="#">Privacy</a></p>
+        </footer>
+    </form>
+</body>
+</html>
