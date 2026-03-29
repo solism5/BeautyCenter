@@ -12,10 +12,11 @@
 <body>
     <form id="form1" runat="server">
         <nav class="navbar">
-            <a href="<%: ResolveUrl("~/AgendarCita.aspx") %>" class="navbar-brand">Beauty Glow Center</a>
+            <a href="<%: ResolveUrl("~/UI/AgendarCita.aspx") %>" class="navbar-brand">Beauty Glow Center</a>
             <div class="nav-links">
-                <a href="<%: ResolveUrl("~/AgendarCita.aspx") %>" class="nav-link">Agendar Cita</a>
-                <a href="<%: ResolveUrl("~/Clientes.aspx") %>" class="nav-link">Manejar Clientes</a>
+                <a href="<%: ResolveUrl("~/UI/AgendarCita.aspx") %>" class="nav-link">Agendar Cita</a>
+                <a href="<%: ResolveUrl("~/UI/VerCitas.aspx") %>" class="nav-link">Ver Citas</a>
+                <a href="<%: ResolveUrl("~/UI/Clientes.aspx") %>" class="nav-link">Manejar Clientes</a>
             </div>
         </nav>
 

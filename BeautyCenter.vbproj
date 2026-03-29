@@ -92,33 +92,57 @@
     <Import Include="System.Web.UI.HtmlControls" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AgendarCita.aspx" />
-    <Content Include="Clientes.aspx" />
+    <Content Include="UI\AgendarCita.aspx" />
+    <Content Include="UI\Clientes.aspx" />
     <Content Include="Content\Site.css" />
-    <Content Include="Default.aspx" />
+    <Content Include="UI\Default.aspx" />
+    <Content Include="UI\Login.aspx" />
+    <Content Include="UI\Register.aspx" />
+    <Content Include="UI\VerCitas.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Images\logo.png" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AgendarCita.aspx.designer.vb">
+    <Compile Include="UI\Login.aspx.designer.vb">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Login.aspx.vb">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UI\Register.aspx.designer.vb">
+      <DependentUpon>Register.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Register.aspx.vb">
+      <DependentUpon>Register.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UI\VerCitas.aspx.designer.vb">
+      <DependentUpon>VerCitas.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="UI\VerCitas.aspx.vb">
+      <DependentUpon>VerCitas.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UI\AgendarCita.aspx.designer.vb">
       <DependentUpon>AgendarCita.aspx</DependentUpon>
     </Compile>
-    <Compile Include="AgendarCita.aspx.vb">
+    <Compile Include="UI\AgendarCita.aspx.vb">
       <DependentUpon>AgendarCita.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Clientes.aspx.designer.vb">
+    <Compile Include="UI\Clientes.aspx.designer.vb">
       <DependentUpon>Clientes.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Clientes.aspx.vb">
+    <Compile Include="UI\Clientes.aspx.vb">
       <DependentUpon>Clientes.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Default.aspx.designer.vb">
+    <Compile Include="UI\Default.aspx.designer.vb">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Default.aspx.vb">
+    <Compile Include="UI\Default.aspx.vb">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -236,3 +260,5 @@
     <Error Condition="!Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
   </Target>
 </Project>
+
+

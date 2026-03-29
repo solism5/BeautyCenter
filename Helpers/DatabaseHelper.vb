@@ -12,12 +12,17 @@ Public Class DatabaseHelper
     ' DEVUELVE DATATABLE
     '========================================
     Public Shared Function ExecuteDataTable(query As String,
-                                            Optional parameters() As SqlParameter = Nothing) As DataTable
+                                            Optional parameters() As SqlParameter = Nothing,
+                                            Optional isStoredProcedure As Boolean = False) As DataTable
 
         Dim dt As New DataTable()
 
         Using conn As New SqlConnection(connectionString)
             Using cmd As New SqlCommand(query, conn)
+
+                If isStoredProcedure Then
+                    cmd.CommandType = CommandType.StoredProcedure
+                End If
 
                 If parameters IsNot Nothing Then
                     cmd.Parameters.AddRange(parameters)
@@ -39,10 +44,15 @@ Public Class DatabaseHelper
     ' DEVUELVE ESCALAR
     '========================================
     Public Shared Function ExecuteScalar(query As String,
-                                         Optional parameters() As SqlParameter = Nothing) As Object
+                                         Optional parameters() As SqlParameter = Nothing,
+                                         Optional isStoredProcedure As Boolean = False) As Object
 
         Using conn As New SqlConnection(connectionString)
             Using cmd As New SqlCommand(query, conn)
+
+                If isStoredProcedure Then
+                    cmd.CommandType = CommandType.StoredProcedure
+                End If
 
                 If parameters IsNot Nothing Then
                     cmd.Parameters.AddRange(parameters)
@@ -61,10 +71,15 @@ Public Class DatabaseHelper
     ' INSERT / UPDATE / DELETE
     '========================================
     Public Shared Sub ExecuteNonQuery(query As String,
-                                      Optional parameters() As SqlParameter = Nothing)
+                                      Optional parameters() As SqlParameter = Nothing,
+                                      Optional isStoredProcedure As Boolean = False)
 
         Using conn As New SqlConnection(connectionString)
             Using cmd As New SqlCommand(query, conn)
+
+                If isStoredProcedure Then
+                    cmd.CommandType = CommandType.StoredProcedure
+                End If
 
                 If parameters IsNot Nothing Then
                     cmd.Parameters.AddRange(parameters)

@@ -18,17 +18,20 @@ Public Class AgendarCita
     Private Sub CargarClientes()
 
         Dim dt = DatabaseHelper.ExecuteDataTable(
-            "SELECT ID, Nombre FROM Cliente"
+            "sp_LeerUsuarios",
+            isStoredProcedure:=True
         )
 
         ddlClientes.Items.Clear()
         ddlClientes.Items.Add(New ListItem("-- Seleccione un cliente --", ""))
 
         For Each row As DataRow In dt.Rows
-            ddlClientes.Items.Add(New ListItem(
-                row("Nombre").ToString(),
-                row("ID").ToString()
-            ))
+            If row("Rol").ToString() = "Cliente" Then
+                ddlClientes.Items.Add(New ListItem(
+                    row("Nombre").ToString(),
+                    row("ID").ToString()
+                ))
+            End If
         Next
 
     End Sub
@@ -39,7 +42,8 @@ Public Class AgendarCita
     Private Sub CargarProcedimientos()
 
         Dim dt = DatabaseHelper.ExecuteDataTable(
-            "SELECT ID, NombreProcedimiento FROM Procedimiento"
+            "sp_LeerProcedimientos",
+            isStoredProcedure:=True
         )
 
         ddlProcedimientos.Items.Clear()
@@ -63,9 +67,14 @@ Public Class AgendarCita
         lblMensaje.Text = ""
         lblMensaje.CssClass = ""
 
-        Dim tipoCliente As String = hfClienteType.Value
+        Dim idCliente As String = ddlClientes.SelectedValue
         Dim idProcedimiento As String = ddlProcedimientos.SelectedValue
         Dim fechaCitaStr As String = txtFechaCita.Text
+
+        If String.IsNullOrEmpty(idCliente) Then
+            MostrarError("Debe seleccionar un cliente.")
+            Return
+        End If
 
         If String.IsNullOrEmpty(idProcedimiento) Then
             MostrarError("Debe seleccionar un procedimiento.")
@@ -83,84 +92,22 @@ Public Class AgendarCita
             Return
         End If
 
-        Dim idCliente As Integer = 0
-
         Try
 
-            '===================================
-            ' CLIENTE NUEVO
-            '===================================
-            If tipoCliente = "nuevo" Then
-
-                Dim nombre As String = txtNombre.Text.Trim()
-                Dim correo As String = txtCorreo.Text.Trim()
-                Dim telefono As String = txtTelefono.Text.Trim()
-
-                If String.IsNullOrEmpty(nombre) OrElse
-                   String.IsNullOrEmpty(correo) OrElse
-                   String.IsNullOrEmpty(telefono) Then
-
-                    MostrarError("Todos los campos del cliente son requeridos.")
-                    Return
-                End If
-
-                Dim sqlInsertCliente As String =
-                    "INSERT INTO Cliente (Nombre, Correo, NumeroTelefono) " &
-                    "OUTPUT INSERTED.ID " &
-                    "VALUES (@Nombre, @Correo, @NumeroTelefono)"
-
-                Dim result = DatabaseHelper.ExecuteScalar(sqlInsertCliente,
-                    {
-                        New SqlParameter("@Nombre", nombre),
-                        New SqlParameter("@Correo", correo),
-                        New SqlParameter("@NumeroTelefono", telefono)
-                    }
-                )
-
-                idCliente = Convert.ToInt32(result)
-
-            Else
-
-                '===================================
-                ' CLIENTE EXISTENTE
-                '===================================
-                If String.IsNullOrEmpty(ddlClientes.SelectedValue) Then
-                    MostrarError("Debe seleccionar un cliente existente.")
-                    Return
-                End If
-
-                idCliente = Convert.ToInt32(ddlClientes.SelectedValue)
-
-            End If
-
-
-            '===================================
-            ' INSERTAR CITA
-            '===================================
-            Dim sqlInsertCita As String =
-                "INSERT INTO Cita (IDPersona, IDProcedimiento, Fecha) " &
-                "VALUES (@IDPersona, @IDProcedimiento, @Fecha)"
-
-            DatabaseHelper.ExecuteNonQuery(sqlInsertCita,
+            DatabaseHelper.ExecuteNonQuery("sp_CrearCita",
                 {
-                    New SqlParameter("@IDPersona", idCliente),
+                    New SqlParameter("@IDPersona", Convert.ToInt32(idCliente)),
                     New SqlParameter("@IDProcedimiento", Convert.ToInt32(idProcedimiento)),
                     New SqlParameter("@Fecha", fechaCita)
-                }
+                },
+                isStoredProcedure:=True
             )
-
 
             MostrarExito("¡Cita agendada exitosamente!")
 
-            ' Limpiar campos
-            txtNombre.Text = ""
-            txtCorreo.Text = ""
-            txtTelefono.Text = ""
             txtFechaCita.Text = ""
             ddlProcedimientos.SelectedIndex = 0
             ddlClientes.SelectedIndex = 0
-
-            CargarClientes()
 
         Catch ex As Exception
             MostrarError("Error al agendar la cita: " & ex.Message)

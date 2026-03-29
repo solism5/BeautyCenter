@@ -7,14 +7,12 @@
 Option Strict Off
 Option Explicit On
 
-Partial Public Class AgendarCita
-    Protected WithEvents hfClienteType As Global.System.Web.UI.WebControls.HiddenField
+Partial Public Class Register
     Protected WithEvents txtNombre As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents txtCorreo As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents txtTelefono As Global.System.Web.UI.WebControls.TextBox
-    Protected WithEvents ddlClientes As Global.System.Web.UI.WebControls.DropDownList
-    Protected WithEvents ddlProcedimientos As Global.System.Web.UI.WebControls.DropDownList
-    Protected WithEvents txtFechaCita As Global.System.Web.UI.WebControls.TextBox
-    Protected WithEvents btnConfirmar As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents txtContrasena As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents ddlRol As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents btnRegistrar As Global.System.Web.UI.WebControls.Button
     Protected WithEvents lblMensaje As Global.System.Web.UI.WebControls.Label
 End Class

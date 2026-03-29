@@ -17,10 +17,20 @@ Public Class Clientes
     Private Sub BindClientes()
 
         Dim dt = DatabaseHelper.ExecuteDataTable(
-            "SELECT ID, Nombre, Correo, NumeroTelefono FROM Cliente"
+            "sp_LeerUsuarios",
+            isStoredProcedure:=True
         )
 
-        gvClientes.DataSource = dt
+        Dim dtClientes As New DataTable()
+        dtClientes = dt.Clone()
+
+        For Each row As DataRow In dt.Rows
+            If row("Rol").ToString() = "Cliente" Then
+                dtClientes.ImportRow(row)
+            End If
+        Next
+
+        gvClientes.DataSource = dtClientes
         gvClientes.DataBind()
 
     End Sub
@@ -48,16 +58,15 @@ Public Class Clientes
 
         Try
 
-            Dim sql As String =
-                "INSERT INTO Cliente (Nombre, Correo, NumeroTelefono) " &
-                "VALUES (@Nombre, @Correo, @NumeroTelefono)"
-
-            DatabaseHelper.ExecuteNonQuery(sql,
+            DatabaseHelper.ExecuteNonQuery("sp_CrearUsuario",
                 {
                     New SqlParameter("@Nombre", nombre),
                     New SqlParameter("@Correo", correo),
-                    New SqlParameter("@NumeroTelefono", telefono)
-                }
+                    New SqlParameter("@Contrasena", "1234"),
+                    New SqlParameter("@NumeroTelefono", telefono),
+                    New SqlParameter("@Rol", "Cliente")
+                },
+                isStoredProcedure:=True
             )
 
             txtNuevoNombre.Text = ""
@@ -109,20 +118,27 @@ Public Class Clientes
 
                     Try
 
-                        Dim sqlUpdate As String =
-                            "UPDATE Cliente SET " &
-                            "Nombre = @Nombre, " &
-                            "Correo = @Correo, " &
-                            "NumeroTelefono = @NumeroTelefono " &
-                            "WHERE ID = @ID"
+                        Dim dtUsuario = DatabaseHelper.ExecuteDataTable(
+                            "sp_LeerUsuarioPorID",
+                            {New SqlParameter("@ID", id)},
+                            isStoredProcedure:=True
+                        )
 
-                        DatabaseHelper.ExecuteNonQuery(sqlUpdate,
+                        Dim contrasenaActual As String = DatabaseHelper.ExecuteScalar(
+                            "SELECT Contrasena FROM Usuario WHERE ID = @ID",
+                            {New SqlParameter("@ID", id)}
+                        ).ToString()
+
+                        DatabaseHelper.ExecuteNonQuery("sp_ActualizarUsuario",
                             {
                                 New SqlParameter("@ID", id),
                                 New SqlParameter("@Nombre", nombre),
                                 New SqlParameter("@Correo", correo),
-                                New SqlParameter("@NumeroTelefono", telefono)
-                            }
+                                New SqlParameter("@Contrasena", contrasenaActual),
+                                New SqlParameter("@NumeroTelefono", telefono),
+                                New SqlParameter("@Rol", "Cliente")
+                            },
+                            isStoredProcedure:=True
                         )
 
                         MostrarExito("Cliente actualizado exitosamente.")
@@ -139,13 +155,11 @@ Public Class Clientes
 
                     Try
 
-                        Dim sqlDelete As String =
-                            "DELETE FROM Cliente WHERE ID = @ID"
-
-                        DatabaseHelper.ExecuteNonQuery(sqlDelete,
+                        DatabaseHelper.ExecuteNonQuery("sp_EliminarUsuario",
                             {
                                 New SqlParameter("@ID", id)
-                            }
+                            },
+                            isStoredProcedure:=True
                         )
 
                         MostrarExito("Cliente eliminado exitosamente.")
